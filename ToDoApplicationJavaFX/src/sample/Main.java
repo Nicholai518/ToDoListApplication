@@ -14,12 +14,20 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.*;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
+
+        // to-do list
+        ToDoList userToDoList = new ToDoList();
 
         // To-Do Top Description
         Text toDoText = new Text("To-Do List");
@@ -56,7 +64,6 @@ public class Main extends Application {
         timeSensitiveMainVBox.setAlignment(Pos.CENTER);
         timeSensitiveMainVBox.setPadding(new Insets(10));
 
-
         // LOI Label
         Label levelOfImportanceLabel = new Label("Level of Importance");
 
@@ -71,7 +78,6 @@ public class Main extends Application {
         mediumButton.setToggleGroup(levelOfImportanceToggleGroup);
         highButton.setToggleGroup(levelOfImportanceToggleGroup);
 
-
         // LOI controls
         HBox levelOfImportanceControlsHBox = new HBox(10, lowButton, mediumButton, highButton);
         levelOfImportanceControlsHBox.setAlignment(Pos.CENTER);
@@ -82,13 +88,8 @@ public class Main extends Application {
         levelOfImportanceMainVBox.setAlignment(Pos.CENTER);
         levelOfImportanceMainVBox.setPadding(new Insets(10));
 
-
-        // Java Map / Collection cheat sheet says use TreeMap
-        // Map<Integer, List<Task>> userToDoList = new TreeMap<Integer, List<Task>>();
-
         // Text used for To-Do display
         Text toDoDisplayText = new Text();
-
 
         // List for Tasks
         List<Task> theTaskList = new LinkedList<Task>();
@@ -134,6 +135,7 @@ public class Main extends Application {
 
             // Create Task
             Task userTask = new Task(userTaskDisc, isTimeSensitive, loi );
+
             // Add to List
             theTaskList.add(userTask);
             // Sort, reverse, display
@@ -151,6 +153,9 @@ public class Main extends Application {
                 counter++;
             }
 
+            // Update to-do list
+            userToDoList.setToDoList(theTaskList);
+
             // Display List values
             toDoDisplayText.setText(listSringAccumulator);
 
@@ -162,20 +167,72 @@ public class Main extends Application {
             lowButton.setSelected(true);
         });
 
-
-
         // Button & Event Handling
         Button printButton = new Button("Print");
         printButton.setOnAction(e->
         {
+            // Creating file ?
+            File toDoFile = new File("C:\\toDoList.txt");
+
+            // Used to append to a file if one already exists with this name
+            FileWriter fileWriter = null;
+
+            try
+            {
+                // File Writer and PrintWriter
+                fileWriter = new FileWriter(toDoFile, true);
+                PrintWriter printWriter = new PrintWriter(fileWriter);
+
+                // Writing to file
+                Iterator<Task> itr = userToDoList.getToDoList().iterator();
+
+                int counter = 1;
+                String listStringAccumulator = "";
+
+                while(itr.hasNext())
+                {
+                    listStringAccumulator += counter + ": " + itr.next() + "\n";
+                    counter++;
+                }
+
+
+                LocalDate localDate = LocalDate.now();
+                printWriter.println("----------------------------");
+                printWriter.println("to-do-list: " + localDate);
+                printWriter.println(listStringAccumulator);
+                printWriter.println("");
+                printWriter.println("");
+
+                // Close
+                printWriter.close();
+                fileWriter.close();
+
+                // Update Text display
+                toDoDisplayText.setText("File Has been saved to C drive. Good Luck!");
+
+            }
+            // Throws IOException
+            catch (IOException ex)
+            {
+                ex.printStackTrace();
+            }
+
+
+
+
+
 
 
         });
 
-        // HBox buttonH = new HBox(5,submitButton, );
+        // Button Container
+        HBox buttonHBox = new HBox(10, submitButton, printButton);
+        buttonHBox.setAlignment(Pos.CENTER);
+        buttonHBox.setPadding(new Insets(10));
+
 
         // Main container
-        VBox mainContainer = new VBox(10, toDoText, enterTaskHBox, timeSensitiveMainVBox, levelOfImportanceMainVBox, submitButton, toDoDisplayText);
+        VBox mainContainer = new VBox(10, toDoText, enterTaskHBox, timeSensitiveMainVBox, levelOfImportanceMainVBox, buttonHBox, toDoDisplayText);
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.setPadding(new Insets(10));
 
