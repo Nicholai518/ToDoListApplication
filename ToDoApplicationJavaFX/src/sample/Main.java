@@ -7,8 +7,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -230,18 +231,33 @@ public class Main extends Application {
         buttonHBox.setAlignment(Pos.CENTER);
         buttonHBox.setPadding(new Insets(10));
 
+        // Background picture
+        Image backgroundImageForApplication = new Image("https://www.designeatrepeat.com/wp-content/uploads/printable-to-do-list-680x803.png");
+
+        // create a background image
+        BackgroundImage backgroundimage = new BackgroundImage(backgroundImageForApplication,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundPosition.CENTER,
+                BackgroundSize.DEFAULT);
+
+        // create Background
+        Background background = new Background(backgroundimage);
+
 
         // Main container
         VBox mainContainer = new VBox(10, toDoText, enterTaskHBox, timeSensitiveMainVBox, levelOfImportanceMainVBox, buttonHBox, toDoDisplayText);
+        mainContainer.setBackground(background);
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.setPadding(new Insets(10));
 
         // Scene
         Scene scene = new Scene(mainContainer, 500, 500);
 
+
         // Stage
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Chapter 21 Problem 1");
+        primaryStage.setTitle("Enter your Tasks for the day!");
         primaryStage.show();
     }
 
