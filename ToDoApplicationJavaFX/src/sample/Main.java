@@ -31,7 +31,7 @@ public class Main extends Application {
         ToDoList userToDoList = new ToDoList();
 
         // To-Do Top Description
-        Text toDoText = new Text("To-Do List");
+        Text toDoText = new Text("To-Do List");  // No longer needed because background image states to-do list in similar spot
         toDoText.setFont(new Font("Verdana", 20));
         toDoText.setFill(Color.BLACK);
 
@@ -218,12 +218,6 @@ public class Main extends Application {
                 ex.printStackTrace();
             }
 
-
-
-
-
-
-
         });
 
         // Button Container
@@ -246,14 +240,13 @@ public class Main extends Application {
 
 
         // Main container
-        VBox mainContainer = new VBox(10, toDoText, enterTaskHBox, timeSensitiveMainVBox, levelOfImportanceMainVBox, buttonHBox, toDoDisplayText);
+        VBox mainContainer = new VBox(10, enterTaskHBox, timeSensitiveMainVBox, levelOfImportanceMainVBox, buttonHBox, toDoDisplayText);
         mainContainer.setBackground(background);
         mainContainer.setAlignment(Pos.CENTER);
         mainContainer.setPadding(new Insets(10));
 
         // Scene
         Scene scene = new Scene(mainContainer, 500, 500);
-
 
         // Stage
         primaryStage.setScene(scene);
